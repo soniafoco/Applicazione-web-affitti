@@ -1,0 +1,278 @@
+{% extends "base.html" %}
+{% block title %}Profilo di {{current_user.nome}}{% endblock %}
+
+{% block logout %}
+<li class="nav-item">
+    <a class="nav-link" href="{{url_for('logout')}}">Logout</a>
+</li>
+{% endblock %}
+
+{% block content %}
+
+{% if current_user.is_authenticated %}
+
+    <aside id="profilo" class="row g-0">
+        <div class="col-lg-2 col-sm-6">
+            <div id="profilo-nome">
+                <img src="{{url_for('static', filename='icona-utente.jpg')}}" alt="Icona utente" id="img-utente">
+                <p id="nome-utente">{{current_user.nome.upper()}} {{current_user.cognome.upper()}}</p>
+            </div>
+            <p class="info-utente">{{current_user.email}}</p>
+        </div>
+        {% if current_user.tipologia_utente=='locatore' %}
+        <div class="col-lg-8 col-sm-12" id="button-crea-div">
+            <button type="button" class="btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="button-crea">PUBBLICA UN NUOVO ANNUNCIO</button>
+            <!-- Modale per la creazione dell'annuncio -->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <p class="modal-title">Crea un annuncio per il tuo immobile</p>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <form action="/nuovo_annuncio" method="POST" enctype="multipart/form-data" id="form-nuovo-annuncio">
+                            <div class="modal-body">
+                                <label for="titoloInput" class="form-label">Inserire il titolo dell'annuncio</label>
+                                <input type="text" class="form-control" placeholder="Titolo" id="titoloInput" minlength="10" maxlength="200" name="titolo" required>
+                                <label for="indirizzoInput" class="form-label">Inserire l'indirizzo dell'immobile (via, numero civico)</label>
+                                <input type="text" class="form-control" placeholder="Indirizzo" id="indirizzoInput" minlength="5" maxlength="100" name="indirizzo" required>
+                                <label for="tipologiaInput" class="form-label">Di quale tipologia è l'immobile?</label>
+                                <select class="form-select" name="tipologia" id="tipologiaInput" required>
+                                    <option value="" disabled selected>Seleziona la tipologia</option>
+                                    <option value="indipendente">Casa indipendente</option>
+                                    <option value="appartamento">Appartamento</option>
+                                    <option value="villa">Villa</option>
+                                    <option value="loft">Loft</option>
+                                </select>
+                                <label for="localiInput" class="form-label">Quanti locali ha l'immobile?</label>
+                                <select class="form-select" name="locali" id="localiInput" required>
+                                    <option value="" disabled selected>Seleziona il numero di locali</option>
+                                    <option value=1>1</option>
+                                    <option value=2>2</option>
+                                    <option value=3>3</option>
+                                    <option value=4>4</option>
+                                    <option value=5>5+</option>
+                                </select>
+                                <label for="descrizioneInput" class="form-label">Inserisci una breve descrizione dell'immobile</label>
+                                <textarea class="form-control" placeholder="Descrizione" id="descrizioneInput" name="descrizione" minlength="10" required></textarea>
+                                <label for="prezzoInput" class="form-label">Inserisci il prezzo mensile dell'immobile</label>
+                                <input type="number" class="form-control" placeholder="€" id="prezzoInput" name="prezzo" min="0" required>
+                                <label for="arredataInput" class="form-label">L'immobile è arredato?</label>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input ms-3" value=1 type="radio" name="arredata" id="flexRadioDefault1" required>
+                                    <label class="form-check-label" for="flexRadioDefault1">Sì</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" value=0 type="radio" name="arredata" id="flexRadioDefault2">
+                                    <label class="form-check-label" for="flexRadioDefault2">No</label>
+                                </div>
+                                <label for="fotoInput" class="form-label">Inserire le immagini dell'annuncio</label>
+                                {% for i in range (5) %}
+                                <div class="foto-annuncio-input">
+                                    <p>Immagine {{i+1}}</p>
+                                    {% if i==0 %}<input type="file" id="fotoInput" class="form-control mb-1" name="foto{{i}}" accept=".jpg, .jpeg, .png" required>
+                                    {% else %}<input type="file" id="fotoInput" class="form-control mb-1" name="foto{{i}}" accept=".jpg, .jpeg, .png">
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                                <label for="disponibilitaInput" class="form-label">Vuoi rendere l'annuncio disponibile? Sarà visibile a tutti i clienti</label>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" value=1 type="radio" name="disponibilita" id="flexRadioDefault1" required>
+                                    <label class="form-check-label" for="flexRadioDefault1">Sì</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" value=0 type="radio" name="disponibilita" id="flexRadioDefault2">
+                                    <label class="form-check-label" for="flexRadioDefault2">No</label>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                <button type="submit" class="btn btn-success">Pubblica</button>
+                                <input type="number" name="id_locatore" value="{{current_user.id}}" hidden>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- Fine modale -->
+        </div> 
+        {% endif %}
+
+        <div class="col-lg-2 col-sm-6" id="tipologia-utente-div">
+            <p class="info-utente">{{current_user.tipologia_utente.upper()}}</p>
+            <p class="info-utente"><a id="link-logout" href="{{url_for('logout')}}">Logout</a></p>
+        </div>
+    </aside>
+
+    <main class="my-main">
+        <!-- Profilo del locatore -->
+        {% if current_user.tipologia_utente=='locatore' %}
+        <!-- Sezione annunci del locatore -->
+        <section>
+            <hr>
+            {% if annunci|length==0 %}
+            <p class="title-richieste">Non sono presenti annunci</p>
+            {% else %}
+            <p class="title-richieste">GLI ANNUNCI DEI TUOI IMMOBILI:</p>
+            {% if disponibili|length>0 %}
+                <span class="badge text-bg-success">DISPONIBILI</span>
+                {% for annuncio in disponibili %}
+                <article class="row g-0">
+                    <div class="col-lg-4 col-sm-12">
+                        <a href="{{url_for('annuncio', id=annuncio.id)}}">
+                            <img src="{{url_for('static', filename=annuncio.foto1)}}" class="img-casa-richiesta" alt="Immagine casa">
+                        </a> 
+                    </div>
+                    <div class="col-lg-8 col-sm-12 ps-lg-4">
+                        <p class="richiesta-titolo">{{annuncio.titolo}} ({{annuncio.indirizzo}})</p>
+                        {% if annuncio.locali==5 and annuncio.tipologia!='indipendente' %} <p class="richiesta-sottotitolo">5+ locali, {{annuncio.tipologia}}, {{annuncio.prezzo}}€</p>
+                        {% elif annuncio.locali==5 and annuncio.tipologia=='indipendente' %} <p class="richiesta-sottotitolo">5+ locali, casa indipendente, {{annuncio.prezzo}}€</p>
+                        {% elif annuncio.locali!=5 and annuncio.tipologia=='indipendente' %} <p class="richiesta-sottotitolo">{{annuncio.locali}} locali, casa indipendente, {{annuncio.prezzo}}€</p>
+                        {% else %}<p class="richiesta-sottotitolo">{{annuncio.locali}} locali, {{annuncio.tipologia}}, {{annuncio.prezzo}}€</p>{% endif %}
+                        <button class="btn btn-outline-success mybtn ms-2"><a href="{{url_for('annuncio', id=annuncio.id)}}" class="button-modifica">MODIFICA</a></button>
+                    </div>
+                </article>
+                {% endfor %}
+            {% endif %}
+
+            {% if no_disponibili|length>0 %}
+                <span class="badge text-bg-danger">NON DISPONIBILI</span>
+                {% for annuncio in no_disponibili %}
+                <article class="row g-0">
+                    <div class="col-lg-4 col-sm-12">
+                        <a href="{{url_for('annuncio', id=annuncio.id)}}">
+                            <img src="{{url_for('static', filename=annuncio.foto1)}}" class="img-casa-richiesta" alt="Immagine casa">
+                        </a> 
+                    </div>
+                    <div class="col-lg-8 col-sm-12 ps-lg-4">
+                        <p class="richiesta-titolo">{{annuncio.titolo}} ({{annuncio.indirizzo}})</p>
+                        {% if annuncio.locali==5 and annuncio.tipologia!='indipendente' %} <p class="richiesta-sottotitolo">5+ locali, {{annuncio.tipologia}}, {{annuncio.prezzo}}€</p>
+                        {% elif annuncio.locali==5 and annuncio.tipologia=='indipendente' %} <p class="richiesta-sottotitolo">5+ locali, casa indipendente, {{annuncio.prezzo}}€</p>
+                        {% elif annuncio.locali!=5 and annuncio.tipologia=='indipendente' %} <p class="richiesta-sottotitolo">{{annuncio.locali}} locali, casa indipendente, {{annuncio.prezzo}}€</p>
+                        {% else %}<p class="richiesta-sottotitolo">{{annuncio.locali}} locali, {{annuncio.tipologia}}, {{annuncio.prezzo}}€</p>{% endif %}
+                        <button class="btn btn-outline-success mybtn ms-2"><a href="{{url_for('annuncio', id=annuncio.id)}}" class="button-modifica">MODIFICA</a></button>
+                    </div>
+                </article>
+                {% endfor %}
+            {% endif %}
+            {% endif %} <!-- riferito alla presenza di annunci in generale-->
+        </section>
+
+        <!-- Sezione richieste di visita agli immobili ricevute -->
+        <hr>
+        <section>
+            <div class="row g-0" id="richieste-filtro">
+                <div class="col-lg-4 col-md-6">
+                    {% if prenotazioni_locatore|length==0 %}
+                        {% if filtro==None %}<p class="title-richieste pb-2">Non hai ricevuto richieste di prenotazione</p>
+                        {% else %}<p class="title-richieste pb-2">Non hai prenotazioni in stato '{{filtro}}'</p>{% endif %}
+                    {% else %}
+                        <p class="title-richieste">RICHIESTE DI PRENOTAZIONE RICEVUTE:</p>
+                    {% endif %}
+                </div>
+                <div class="col-lg-8 col-md-6">
+                    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">Filtri</a>
+                    <ul class="dropdown-menu">
+                        {% if filtro!=None %}<a class="dropdown-item" href="{{url_for('profile', id=current_user.id)}}">Visualizza tutte le prenotazioni</a></li>{% endif %}
+                        <li><a class="dropdown-item" href="{{url_for('profile', id=current_user.id, filtro='accettata')}}">Visualizza le prenotazioni accettate</a></li>
+                        <li><a class="dropdown-item" href="{{url_for('profile', id=current_user.id, filtro='rifiutata')}}">Visualizza le prenotazioni rifiutate</a></li>
+                        <li><a class="dropdown-item" href="{{url_for('profile', id=current_user.id, filtro='richiesta')}}">Visualizza le prenotazioni richieste</a></li>
+                    </ul>
+                </div>
+            {% if prenotazioni_locatore|length>0 %}
+            {% for prenotazione in prenotazioni_locatore %}
+            <article id="box-prenotazione">
+                <div id="container-prenotazione">
+                    <p class="richiesta-titolo-locatore">{{prenotazione.nome.upper()}} {{prenotazione.cognome.upper()}} ha richiesto una visita per "{{prenotazione.titolo}}"</p>
+                    <p class="richiesta-sottotitolo-locatore">Indirizzo: {{prenotazione.indirizzo}}</p>
+                    <hr>
+                    <div class="row g-0">
+                        <div class="col-lg-6 col-md-12">
+                            <ul class="elenco-profilo">
+                                {% set mesi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'] %}
+                                {% set data = prenotazione.data.split('-') %}
+                                <li>Quando: <p class="info-prenotazione">{{data[2]}} {{mesi[data[1]|int-1]}} alle ore {{prenotazione.orario}}</p></li>
+                                <li>Modalità:<p class="info-prenotazione">{% if prenotazione.modalita=='persona' %}di persona {% elif prenotazione.modalita=='remoto' %}da remoto {% endif %}</p></li>
+                                <li>Stato della prenotazione: 
+                                    {% if prenotazione.stato=='richiesta' %} <span class="badge text-bg-secondary" id="badge-disponibilita">
+                                    {% elif prenotazione.stato=='accettata' %} <span class="badge text-bg-success" id="badge-disponibilita">
+                                    {% elif prenotazione.stato=='rifiutata' %} <span class="badge text-bg-danger" id="badge-disponibilita"> 
+                                    {% endif %} {{prenotazione.stato.upper()}}</span>
+                                </li>
+                                {% if prenotazione.stato=='rifiutata' and prenotazione.motivo_rifiuto!=NULL %}
+                                <li>Motivo del rifiuto: <p class="info-prenotazione">"{{prenotazione.motivo_rifiuto}}"</p></li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                        <div class="col-lg-6 col-md-12">
+                            {% if prenotazione.stato=='richiesta' %}
+                            <form action="/modifica_prenotazione" method="POST" enctype="multipart/form-data" id="form-accetta-rifiuta" class="row mt-2">
+                                <div class="mt-1">
+                                    <input type="submit" class="btn-check" value="accettata" name="stato" id="success-outlined" autocomplete="off">
+                                    <label class="btn btn-success" for="success-outlined">Accetta</label>
+                                    <input type="submit" class="btn-check" value="rifiutata" name="stato" id="danger-outlined" autocomplete="off">
+                                    <label class="btn btn-danger" for="danger-outlined">Rifiuta</label>
+                                </div>
+                                <div class="mt-1">
+                                    <label for="motivoInput" class="form-label pt-4">Inserisci il motivo del rifiuto (obbligatorio)</label>
+                                    <input type="text" class="form-control" placeholder="Motivo del rifiuto" id="motivoInput" name="motivo_rifiuto" minlength="10">
+                                    <input type="number" name="id_annuncio" value="{{prenotazione.id_annuncio}}" hidden>
+                                    <input type="number" name="id" value="{{prenotazione.id}}" hidden>
+                                </div>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </article>
+            {% endfor %}
+            {% endif %}
+        </section>
+        {% endif %} <!-- if riferito all'essere locatore-->
+
+        <!-- Profilo del cliente/locatore (richieste personali di visita)-->
+        <hr>
+        <section> 
+            {% if prenotazioni|length==0 %}
+            <p class="title-richieste">Non hai ancora effettuato richieste di prenotazione</p>
+            {% else %}
+            <p class="title-richieste">LE TUE RICHIESTE DI PRENOTAZIONE:</p>
+            {% for prenotazione in prenotazioni %}
+            <article class="row g-0">
+                <div class="col-lg-4 col-sm-12">
+                    <a href="{{url_for('annuncio', id=prenotazione.id_annuncio)}}">
+                        <img src="{{url_for('static', filename=prenotazione.foto1)}}" class="img-casa-richiesta" alt="Immagine casa">
+                    </a> 
+                </div>
+                <div class="col-lg-8 col-sm-12 ps-lg-4">
+                    <p class="richiesta-titolo">{{prenotazione.titolo}} ({{prenotazione.indirizzo}})</p>
+                    {% if prenotazione.locali==5 and prenotazione.tipologia!='indipendente' %} <p class="richiesta-sottotitolo">5+ locali, {{prenotazione.tipologia}}, {{prenotazione.prezzo}}€</p>
+                    {% elif prenotazione.locali==5 and prenotazione.tipologia=='indipendente' %} <p class="richiesta-sottotitolo">5+ locali, casa indipendente, {{prenotazione.prezzo}}€</p>
+                    {% elif prenotazione.locali!=5 and prenotazione.tipologia=='indipendente' %} <p class="richiesta-sottotitolo">{{prenotazione.locali}} locali, casa indipendente, {{prenotazione.prezzo}}€</p>
+                    {% else %}<p class="richiesta-sottotitolo">{{prenotazione.locali}} locali, {{prenotazione.tipologia}}, {{prenotazione.prezzo}}€</p>{% endif %}
+                    <ul class="elenco-profilo mt-4">
+                        {% set mesi = ['Gennaio', 'Febbraio', 'Marzo', 'Aprile', 'Maggio', 'Giugno', 'Luglio', 'Agosto', 'Settembre', 'Ottobre', 'Novembre', 'Dicembre'] %}
+                        {% set data = prenotazione.data.split('-') %}
+                        <li>Quando: <p class="info-prenotazione">{{data[2]}} {{mesi[data[1]|int-1]}} alle ore {{prenotazione.orario}}</p></li>
+                        <li>Modalità:<p class="info-prenotazione">{% if prenotazione.modalita=='persona' %}di persona {% elif prenotazione.modalita=='remoto' %}da remoto {% endif %}</p></li>
+                        <li>Stato della prenotazione: 
+                            {% if prenotazione.stato=='richiesta' %}<span class="badge text-bg-secondary" id="badge-disponibilita">
+                            {% elif prenotazione.stato=='accettata' %}<span class="badge text-bg-success" id="badge-disponibilita">
+                            {% elif prenotazione.stato=='rifiutata' %}<span class="badge text-bg-danger" id="badge-disponibilita"> 
+                            {% endif %} {{prenotazione.stato.upper()}}</span>
+                        </li>
+                        {% if prenotazione.stato=='rifiutata' and prenotazione.motivo_rifiuto!=NULL %}
+                        <li>Motivo del rifiuto: <p class="info-prenotazione">"{{prenotazione.motivo_rifiuto}}"</p></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </article>
+            {% endfor %}
+            {% endif %}
+        </section>
+
+    </main>
+
+{% endif %} <!-- if riferito all'autenticazione del cliente -->
+
+{% endblock %}
