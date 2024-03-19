@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<main>
+    <article class="signup-form-article">
+      <div class="signup-form-container">
+        <form action="/login" method="POST" class="signup-form">
+          <p class="form-title mt-4">Bentornato su TrovaAffitto!</p>
+          <div class="input-group">
+            <span class="input-group-text" id="addon-wrapping">@</span>
+            <input type="email" class="form-control" placeholder="Email" aria-describedby="addon-wrapping" name="email" required>
+          </div>
+          <div class="input-group">
+            <input type="password" class="form-control" placeholder="Password" name="password" required>
+          </div>
+          <button type="submit" class="btn btn-success">LOGIN</button>
+          <section id="registrati">
+              <p class="registrati-title">Non sei ancora registrato?</p>
+              <button type="submit" class="btn btn-success"><a href="{{url_for('signup')}}" id="registrati-button">REGISTRATI</a></button>
+          </section>
+        </form>
+      </div>
+    </article>
+</main>
+{% endblock %}

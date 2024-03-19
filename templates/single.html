@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% block title %}{{annuncio.titolo}}{% endblock %}
+
+{% block content %}
+
+<main>
+    <article class="row g-0">
+        <section id="immagini-annuncio" class="col-lg-6 col-md-12 p-4">
+        {% if annuncio.foto|length>1 %}
+            <div id="carouselExampleIndicators" class="carousel slide">
+                <div class="carousel-indicators">
+                {% for foto in annuncio.foto %}
+                    {% if loop.index==1 %}
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                    {% else %}
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="{{loop.index-1}}" aria-label="Slide {{loop.index}}"></button>
+                    {% endif %}
+                {% endfor %}
+                </div>
+                <div class="carousel-inner">
+                {% for foto in annuncio.foto %}
+                    {% if loop.index==1 %}
+                        <div class="carousel-item active">
+                            <img src="{{url_for('static', filename=foto.foto_annuncio)}}"  alt="Immagine casa {{loop.index}}" class="img-casa-carousel">
+                        </div>
+                    {% else %}
+                        <div class="carousel-item">
+                            <img src="{{url_for('static', filename=foto.foto_annuncio)}}" alt="Immagine casa {{loop.index}}" class="img-casa-carousel">
+                        </div>
+                    {% endif %}
+                {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        {% else %}
+            <img src="{{url_for('static', filename=annuncio.foto[0].foto_annuncio)}}" alt="Immagine casa" class="img-casa-carousel">
+        {% endif %}
+        </section>
+        <section id="testo-annuncio" class="col-lg-6 col-md-12 p-3">
+            <div id="annuncio-titolo-prezzo">
+                <h1 id="annuncio-titolo">{{annuncio.titolo}}</h1>
+                <p id="annuncio-prezzo">{{annuncio.prezzo}}€/mese</p>
+            </div>
+            <div id="annuncio-indirizzo">
+                <img src="{{url_for('static', filename='icona-indirizzo.png')}}" alt="Icona segnaposto" id="img-icona-indirizzo">
+                <p>{{annuncio.indirizzo}}</p>
+            </div>
+            <h2 class="annuncio-sottotitolo">Descrizione</h2>
+            <hr><p>{{annuncio.descrizione}}</p>
+            <h2 class="annuncio-sottotitolo">Caratteristiche</h2><hr>
+            <ul id="annuncio-caratteristiche">
+                {% if annuncio.locali==5 %}<li>LOCALI: 5+</li>
+                {% else %}<li>LOCALI: {{annuncio.locali}}</li>{% endif %}
+                {% if annuncio.tipologia=='indipendente' %}<li>TIPOLOGIA: casa indipendente</li>
+                {% else %}<li>TIPOLOGIA: {{annuncio.tipologia}}</li>{% endif %}
+                {% if annuncio.arredata==1 %}
+                    <li>ARREDAMENTO: arredato</li>
+                {% else %}
+                    <li>ARREDAMENTO: non arredato</li>
+                {% endif %}
+                {% if not current_user.is_authenticated or current_user.id!=annuncio.id_locatore %}
+                    <li>LOCATORE: {{email_locatore}}</li>
+                {% endif %}
+                {% if annuncio.disponibilita==1 %}<li class="disponibile mt-2">DISPONIBILE</li>
+                {% elif annuncio.disponibilita==0 %}<li class="disponibile mt-2">NON DISPONIBILE</li>{% endif %}
+            </ul>
+            
+            {% if current_user.is_authenticated and current_user.id!=annuncio.id_locatore and annuncio.disponibilita==1 %}
+                {% if richiesta==True %}
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="button-visita">PRENOTA UNA VISITA</button>
+                <!-- Modale per la prenotazione -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Prenota una visita per questo immobile</h4>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="/prenotazione" method="POST" enctype="multipart/form-data">
+                                <div class="modal-body">
+                                    <label for="modalitaInput" class="form-label">Vuoi visitarlo di persona oppure da remoto?</label>
+                                    <select class="form-select" id="modalitaInput" name="modalita" required>
+                                        <option value="" disabled selected>Seleziona la modalità di visita</option>
+                                        <option value="persona">Di persona</option>
+                                        <option value="remoto">Da remoto</option>
+                                    </select>
+                                    <label for="dataInput" class="form-label">In che giorno vuoi effettuare la visita?</label>
+                                    <input type="date" id="dataInput" class="form-control" min={{data_min}} max={{data_max}} name="data" required/>
+                                    <label for="orarioInput" class="form-label">In che fascia oraria vuoi effettuare la visita?</label>
+                                    <select class="form-select" id="orarioInput" name="orario" required>
+                                        <option value="" disabled selected>Seleziona l'orario</option>
+                                            <option value="9-12">09-12</option>
+                                            <option value="12-14">12-14</option>
+                                            <option value="14-17">14-17</option>
+                                            <option value="17-20">17-20</option>
+                                    </select>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                    <button type="submit" class="btn btn-success">Prenota</button>
+                                    <input type="number" name="id_utente" value="{{current_user.id}}" hidden>
+                                    <input type="number" name="id_annuncio" value="{{annuncio.id}}" hidden>
+                                    <input type="number" name="id_locatore" value="{{annuncio.id_locatore}}" hidden>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fine modale -->
+                {% else %}
+                <p id="avviso-richiesta">Hai già richiesto una visita per questo immobile</p>
+                {% endif %}
+            
+            {% elif current_user.is_authenticated and current_user.id==annuncio.id_locatore %}
+            <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#staticBackdrop">MODIFICA</button>
+                <!-- Modale per la modifica dell'annuncio -->
+                <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h2 class="modal-title">Modifica questo annuncio</h2>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <form action="/modifica_annuncio" method="POST" enctype="multipart/form-data" id="form-modifica-annuncio">
+                                <div class="modal-body">
+                                    <label for="titoloInput" class="form-label">Inserire il nuovo titolo dell'annuncio</label>
+                                    <input type="text" class="form-control" placeholder="{{annuncio.titolo}}" id="titoloInput" name="titolo">
+                                    <label for="tipologiaInput" class="form-label">Modifica la tipologia dell'immobile</label>
+                                    <select class="form-select" name="tipologia" id="tipologiaInput">
+                                        {% set tipologie={'indipendente':'Casa indipendente', 'appartamento':'Appartamento', 'villa':'Villa', 'loft':'Loft'} %}
+                                        {% for key, value in tipologie.items() %}
+                                            {% if annuncio.tipologia==key %}<option value={{key}} selected>{{value}}</option>
+                                            {% else %}<option value={{key}}>{{value}}</option>{% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <label for="localiInput" class="form-label">Quanti locali ha l'immobile?</label>
+                                    <select class="form-select" name="locali" id="localiInput">
+                                        {% set locali=['1','2','3','4','5+'] %}
+                                        {% for num in locali %}
+                                            {% if annuncio.locali==loop.index %}<option value={{loop.index}} selected>{{num}}</option>
+                                            {% else %}<option value={{loop.index}}>{{num}}</option>{% endif %}
+                                        {% endfor %}
+                                    </select>
+                                    <label for="descrizioneInput" class="form-label">Inserisci una nuova descrizione dell'immobile</label>
+                                    <textarea class="form-control" placeholder="{{annuncio.descrizione}}" id="descrizioneInput" name="descrizione"></textarea>
+                                    <label for="prezzoInput" class="form-label">Inserisci il prezzo mensile dell'immobile</label>
+                                    <input type="number" class="form-control" placeholder="{{annuncio.prezzo}}€" id="prezzoInput" name="prezzo">
+                                    <label for="arredataInput" class="form-label">L'immobile è arredato?</label>
+                                    <div class="form-check-inline">
+                                        {% if annuncio.arredata==1 %}
+                                        <input class="form-check-input ms-3" value=1 type="radio" name="arredata" id="flexRadioDefault1" checked>
+                                        {% else %}
+                                        <input class="form-check-input ms-3" value=1 type="radio" name="arredata" id="flexRadioDefault1">
+                                        {% endif %}
+                                        <label class="form-check-label" for="flexRadioDefault1">Sì</label>
+                                    </div>
+                                    <div class="form-check-inline">
+                                        {% if annuncio.arredata==0 %}
+                                        <input class="form-check-input" value=0 type="radio" name="arredata" id="flexRadioDefault2" checked>
+                                        {% else %}
+                                        <input class="form-check-input" value=0 type="radio" name="arredata" id="flexRadioDefault2">
+                                        {% endif %}
+                                        <label class="form-check-label" for="flexRadioDefault2">No</label>
+                                    </div>
+                                    <label for="fotoInput" class="form-label m-0">Modifica le immagini:</label>
+                                    {% for foto in annuncio.foto %}
+                                    <div class="modifica-foto-annuncio mb-1">
+                                        <p class="immagine-title-form">Immagine {{loop.index}}</p>
+                                        <img src="{{url_for('static', filename=foto.foto_annuncio)}}" alt="Immagine {{loop.index}} casa" class="img-modifica-annuncio">
+                                        <select class="form-select mt-2" name="modifica{{foto.id_foto}}" id="fotoInput">
+                                            <option value="" selected>Seleziona un'opzione</option>
+                                            {% if annuncio.foto|length==1 %}<option disabled value="elimina">Elimina</option>
+                                            {% else %}<option value="elimina">Elimina</option>{% endif %}
+                                            <option value="sostituisci">Sostituisci con un'altra foto</option>
+                                        </select>
+                                        <input type="file" id="fotoInput" class="form-control mt-2" name="foto{{foto.id_foto}}" accept=".jpg, .jpeg, .png">
+                                    </div>
+                                    {% endfor %}
+                                    {% if not annuncio.foto|length>4 %}
+                                        <label for="fotoInput" class="form-label mt-3">Vuoi aggiungere delle immagini?</label>
+                                        {% for i in range(annuncio.foto|length, 5) %}
+                                        <p class="immagine-title-form">Immagine {{i+1}}</p>
+                                        <input type="file" id="fotoInput" class="form-control mt-3 mb-3" name="newfoto{{i+1}}" accept=".jpg, .jpeg, .png">
+                                        {% endfor %}
+                                    {% endif %}
+                                    <label for="disponibilitaInput" class="form-label">Vuoi rendere l'annuncio disponibile? Sarà visibile a tutti i clienti</label>
+                                    <div class="form-check-inline">
+                                        {% if annuncio.disponibilita==1 %}
+                                        <input class="form-check-input" value=1 type="radio" name="disponibilita" id="flexRadioDefault1" checked>
+                                        {% else %}
+                                        <input class="form-check-input" value=1 type="radio" name="disponibilita" id="flexRadioDefault1">
+                                        {% endif %}
+                                        <label class="form-check-label" for="flexRadioDefault1">Sì</label>
+                                    </div>
+                                    <div class="form-check-inline">
+                                        {% if annuncio.disponibilita==0 %}
+                                        <input class="form-check-input" value=0 type="radio" name="disponibilita" id="flexRadioDefault2" checked>
+                                        {% else %}
+                                        <input class="form-check-input" value=0 type="radio" name="disponibilita" id="flexRadioDefault2">
+                                        <label class="form-check-label" for="flexRadioDefault2">No</label>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Chiudi</button>
+                                    <button type="submit" class="btn btn-success">Salva modifiche</button>
+                                    <input type="number" name="id_locatore" value="{{current_user.id}}" hidden>
+                                    <input type="number" name="id" value="{{annuncio.id}}" hidden>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- Fine modale -->
+                {% endif %}
+
+        </section>
+    </article>
+
+</main>
+
+{% endblock %}

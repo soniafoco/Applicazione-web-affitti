@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<main>
+    <article class="signup-form-article">
+        <div class="signup-form-container">
+            <form action="/signup" method="POST" class="signup-form">
+            <p class="form-title mt-4">Benvenuto su TrovaAffitto!</p>
+            <div class="mt-3">
+                <label for="typeUserInput" class="form-label">Vuoi registrarti come cliente oppure locatore?</label>
+                <select class="form-select" id="typeUserInput" name="tipologia_utente" required>
+                    <option value="" disabled selected>Seleziona la tipologia di utente</option>
+                    <option value="cliente">Cliente</option>
+                    <option value="locatore">Locatore</option>
+                  </select>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Nome" name="nome" required>
+            </div>
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Cognome" name="cognome" required>
+            </div>
+            <div class="input-group">
+                <span class="input-group-text">@</span>
+                <input type="email" class="form-control" placeholder="Email"  name="email" required>
+            </div>
+            <div class="input-group">
+                <input type="password" class="form-control" placeholder="Password" name="password" required>
+            </div>
+            <button type="submit" class="btn btn-success" id="registrati-button">REGISTRATI</button>
+            </form>
+        </div>
+    </article>
+</main>
+
+{% endblock %}

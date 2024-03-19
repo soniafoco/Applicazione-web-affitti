@@ -1,0 +1,396 @@
+#mynav{
+    background-color:#9fe99f;
+    
+}
+
+#descrizione-navbar{
+    justify-content: last baseline;
+    align-items: center;
+    font-size: large;
+    font-weight: 500;
+    font-style: italic;
+    padding-top: 0.5rem;
+    margin-right: 2rem;
+}
+
+#mytitle{
+    font-weight:700;
+    font-style: oblique;
+    color:darkgreen;
+    padding-right: 2rem;
+    padding-left: 1rem;
+}
+
+.nav-link{
+    font-size: large;
+    font-weight: 500;
+    padding-right: 2rem;
+    padding-top: 1.2rem;
+}
+
+.img-casa{
+    width: 100%;
+    border-radius: 0.5rem;
+}
+
+#casa-titolo{
+    padding-top: 0.5rem;
+    font-size: 1.5rem;
+    font-weight: 500;
+}
+
+#casa-locali-tipo{
+    font-weight: 200;
+    font-size: x-large;
+}
+
+#casa-prezzo{
+    font-weight: 600;
+    font-size: larger;
+}
+
+.img-casa-carousel{
+    width:100%;
+    border-radius: 0.5rem;
+}
+
+#img-icona-indirizzo{
+    width:25px;
+    height: 25px;
+    margin-left: -0.3rem;
+}
+
+#annuncio-indirizzo{
+    display: flex;
+    justify-content: flex-start;
+}
+
+#annuncio-caratteristiche li{
+    list-style-type: none;
+    margin-left: -2rem;
+}
+
+#annuncio-titolo-prezzo{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#annuncio-titolo{
+    font-size:1.9rem;
+    padding-right: 0.5rem;
+}
+
+#annuncio-prezzo{
+    font-size: x-large;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+.annuncio-sottotitolo{
+    margin-top: 1.5rem;
+    font-size: large;
+    font-weight: 600;
+}
+
+#annuncio-indirizzo p{
+    font-size: larger;
+    font-weight: 300;
+}
+
+.signup-form-article{
+    display: flex;
+    justify-content: center;
+}
+
+.signup-form-container{
+    border-style:solid;
+    border-width: 0.1rem;
+    border-radius: 0.5rem;
+    border-color:darkgreen;
+    max-width: 100%;
+}
+
+#button-visita{
+    color:white;
+    font-size: large;
+    font-weight: 700;
+    margin-top: 1rem;
+}
+
+.input-group{
+    margin-bottom: 1.5rem;
+    margin-top: 1.5rem;
+}
+
+.form-title{
+    font-size:xx-large;
+}
+
+#registrati{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+}
+
+#registrati-button{
+    text-decoration: none;
+    color:white;
+}
+
+.signup-form{
+    margin:2rem;
+}
+
+.registrati-title{
+   font-weight: 500;
+   padding-right: 1rem;
+   font-size: large;
+   padding-top: 1rem;
+}
+
+.form-label{
+    padding-top: 1.5rem;
+    font-size: large;
+    font-weight: 500;
+}
+
+.modal-footer{
+    margin-top: 2rem;
+}
+
+.modal-title{
+    font-size: x-large;
+    font-weight: 500;
+}
+
+#avviso-richiesta{
+    font-style: italic;
+    font-size: larger;
+    font-weight: 500;
+}
+
+#img-utente{
+    width: 2.5rem;
+    padding-right: 0.5rem;
+    padding-bottom: 0.6rem;
+}
+
+#profilo{
+    margin: 2rem;
+    display: flex;
+    justify-content: space-between;
+}
+
+#button-crea{
+    color:darkgreen;
+    background-color:#fffc66;
+    border-color: #fffb00;
+    font-size: larger;
+    border-radius: 0.8rem;
+    font-weight: 600;
+    justify-content: center;
+    height: 50%;
+}
+
+#button-crea:hover{
+    background-color:#f5f103;
+}
+
+#button-crea-div{
+    display: flex;
+    justify-content: center;
+}
+
+#tipologia-utente-div{
+    display: flex;
+    flex-direction: column;
+    align-items: last baseline;
+    justify-content:start;
+}
+
+#link-logout{
+    text-decoration: none;
+    color: black;
+}
+
+#profilo-nome{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+#nome-utente{
+    font-size: x-large;
+    font-weight: 500;
+}
+
+.info-utente{
+    font-size: larger;
+    font-weight: 500;
+}
+
+.title-richieste{
+    margin-top: 2rem;
+    font-weight: 500;
+    font-size: larger;
+    font-style: italic;
+}
+
+.info-prenotazione{
+    font-size: large;
+    font-weight: 350;
+    margin-left: 0.5rem;
+}
+
+.img-casa-richiesta{
+    width: 100%;
+    border-radius: 0.5rem;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.richiesta-titolo{
+    font-size: x-large;
+    font-weight: 500;
+    margin-top: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.richiesta-sottotitolo{
+    font-size: large;
+    font-weight: 450;
+}
+
+.elenco-profilo li{
+    font-size: large;
+    font-weight: 500;
+    list-style: none;
+    margin-left: -2rem;
+    display: flex;
+    justify-content:first baseline;
+}
+
+.badge{
+    width: 100%;
+    font-size: large;
+    font-weight: 500;
+    margin-top: 2rem;
+}
+
+#badge-disponibilita{
+    width: 30%;
+    font-size: medium;
+    margin-left: 0.5rem;
+    margin-top: 0;
+}
+
+.my-main{
+    margin:2rem;
+}
+
+.foto-annuncio-input{
+    padding-bottom: 0.7rem;
+}
+
+.foto-annuncio-input h6{
+   font-weight: 400;
+}
+
+.img-modifica-annuncio{
+    width:20rem;
+    border-radius: 0.5rem;
+}
+
+.immagine-title-form{
+    font-weight: 350;
+    font-size: large;
+    margin-top: 1.2rem;
+}
+
+.button-modifica{
+    color:green;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.mybtn:hover{
+    background-color:rgb(159, 233, 159);
+}
+
+.richiesta-titolo-locatore{
+    font-size: larger;
+    font-weight: 500;
+    margin-top: 2rem;
+}
+
+.richiesta-sottotitolo-locatore{
+    font-size: larger;
+    font-weight: 350;
+}
+
+#box-prenotazione{
+    border-style:solid;
+    border-width: 0.05rem;
+    border-radius: 0.5rem;
+    border-color:grey;
+    max-width: 100%;
+    margin-top: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+#container-prenotazione{
+    margin:1rem;
+}
+
+#richieste-filtro{
+    display: flex;
+    justify-content: first baseline;
+    align-items: center;
+}
+
+footer{
+    background-color:#DAF9D8;
+    height: 3.5rem;
+    width: 100%;
+    margin-top: 2rem;
+}
+
+footer p{
+    padding: 1rem 1rem 0.5rem 1rem;
+    font-weight: 600;
+    font-size: larger;
+    color: darkgreen;
+}
+
+.content{
+    min-height: 31.5rem;
+}
+
+.disponibile{
+    font-style: italic;
+}
+
+
+
+@media (max-width: 991.98px){
+
+    #button-crea-div{
+        order: 2;
+    }
+    
+    #profilo{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    #button-crea{
+        margin-top: 2rem;
+    }
+
+    #descrizione-navbar{
+        display: none;
+    }
+}

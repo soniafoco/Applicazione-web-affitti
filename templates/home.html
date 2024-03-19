@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Homepage{% endblock %}
+
+{% block navbar %}
+
+<li class="nav-item dropdown">
+    <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+      Filtri
+    </a>
+    <ul class="dropdown-menu">
+      <li><a class="dropdown-item" href="{{url_for('home', ordina=1)}}">Ordina per numero di locali crescente</a></li>
+      <li><a class="dropdown-item {% if ordinamento==0 %} disabled {% endif %}" href="{{url_for('home')}}" aria-disabled="true">Ordina per prezzo decrescente</a></li>
+    </ul>
+</li>
+{% endblock %}
+
+
+{% block content %}
+
+<main> 
+    <article class="row g-0">
+    {% for annuncio in annunci %}
+        {% if annuncio.disponibilita==1 %}
+        <div class="col-lg-4 col-md-6 col-sm-12 p-4">
+            <a href="{{url_for('annuncio', id=annuncio.id)}}">
+                <img src="{{url_for('static', filename=annuncio.foto[0])}}" class="img-casa" alt="Immagine casa">
+            </a>
+            <section id="annuncio-casa-home">
+                <h1 id="casa-titolo">{{annuncio.titolo}}</h1>
+                {% if annuncio.locali==5 and annuncio.tipologia!='indipendente' %}<h2 id="casa-locali-tipo">5+ locali  |  {{annuncio.tipologia}}</h2>
+                {% elif annuncio.locali==5 and annuncio.tipologia=='indipendente' %}<h2 id="casa-locali-tipo">5+ locali  |  casa indipendente</h2>
+                {% elif annuncio.locali!=5 and annuncio.tipologia=='indipendente' %}<h2 id="casa-locali-tipo">{{annuncio.locali}}  |  casa indipendente</h2>
+                {% else %}<h2 id="casa-locali-tipo">{{annuncio.locali}} locali  |  {{annuncio.tipologia}}</h2>{% endif %}
+                <h3 id="casa-prezzo">{{annuncio.prezzo}}€</h3>
+            </section>
+        </div>
+        {% endif %}
+    {% endfor %}
+    </article>
+    
+</main>
+
+{% endblock %}
