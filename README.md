@@ -15,7 +15,7 @@ _Locatori_: (email: _sara.rossi@gmail.com_, password: _sara123_), (email: _chiar
 _Clienti_: (email: _paolo.verdi@gmail.com_, password: _paolo123_), (email: _mario.rossi@gmail.com_, password: _mario123_)
 
 ### Nota
-Le immagini presenti nel sito web sono state scaricate da fonti esterne, che ne posseggono ogni diritto e proprietà.
-
+1. Le immagini presenti nel sito web sono state scaricate da fonti esterne, che ne posseggono ogni diritto e proprietà.
+2. Il deploy del sito web è disponibile al link https://soniafoco.pythonanywhere.com/
 
 
