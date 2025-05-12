@@ -10,7 +10,7 @@ from PIL import Image
 
 # creo l'applicazione
 app = Flask(__name__)
-app.config['SECRET_KEY']='my secret key'
+app.config['SECRET_KEY']='***'
 
 
 login_manager = LoginManager() #creo un'oggetto LoginManager
